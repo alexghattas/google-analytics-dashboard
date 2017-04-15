@@ -9,20 +9,95 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
 	<link rel="stylesheet" href="./public/styles/style.css">
+	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100,300|Source+Sans+Pro:200,300" rel="stylesheet">
 </head>
 <body>
 
 	<section id="loginModel" class="loginForm">
-		<form>
-			<input type="text" id="userName" placeholder="Login">
-			<input type="password" id="password" placeholder="Password">
-			<button id="submitButton" >Submit</button>
-		</form>
+		<div class="loginForm__container">
+			<h1>Reports Dashboard</h1>
+			<h3>Sign in below to view your Google Analytics and AdWords Report's</h3>
+			<form class="loginForm__main">
+				<input type="text" id="userName" placeholder="Login">
+				<input type="password" id="password" placeholder="Password">
+				<button id="submitButton" >Sign In</button>
+			</form>
+		</div>
+	</section>
+
+	<nav id="navbarStatus">
+	</nav>
+
+	<section class="otherData">
+		<div>
+			<h3>Your Advertising Metrics</h3>
+			<ul>
+				<li>
+					<h4>Total Ad Clicks</h4>
+					<span id="gaClicks"></span>
+				</li>
+				<li>
+					<h4>Total Ad Cost</h4>
+					<span id="gaCost"></span>
+				</li>
+				<li>
+					<h4>Ads CTR</h4>
+					<span id="adCtr"></span>
+				</li>
+				<li>
+					<h4>Ads CPC</h4>
+					<span id="adCpc"></span>
+				</li>
+				<li>
+					<h4>Total Ad Impressions</h4>
+					<span id="adImpressions"></span>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<h3>Your Website Metrics</h3>
+			<ul>
+				<li>
+					<h4>Total Visits</h4>
+					<span id="gaSessions"></span>
+				</li>
+				<li>
+					<h4>Bounce Rate</h4>
+					<span id="gaBounceRate"></span>
+				</li>
+				<li>
+					<h4>New Users</h4>
+					<span id="gaNewUsers"></span>
+				</li>
+				<li>
+					<h4>Average Session Duration</h4>
+					<span id="gaSessionDuration"></span>
+				</li>
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+		
 	</section>
 
 	<section>
-		<div id="browser" style="margin:auto;width:630px;"></div>
-		<div id="browserTwo" style="margin:auto;width:630px;"></div>
+		<ul class="displayCharts">
+			<li>
+				<div id="usersBrowser" class="chartMain"></div>
+				<p>Source of where your active users are coming from. (Direct is typing your URL in the browser)</p>
+			</li>
+			<li>
+				<div id="usersClickSource" class="chartMain"></div>
+			</li>
+			<li>
+				<div id="usersCampaignSources" class="chartMain"></div>
+				<p>Which Google AdWords campaigns your active users are clicking on (not set are organic clicks)</p>
+			</li>
+			<li>
+				<div id="usersOperatingSystem" class="chartMain"></div>
+				<p>Mobile vs Desktop users (IOS and Android are mobile | Macintosh and Windows are Desktop)</p>
+			</li>
+		</ul>
 	</section>
 
 	<script src="https://www.gstatic.com/firebasejs/3.7.6/firebase.js"></script>

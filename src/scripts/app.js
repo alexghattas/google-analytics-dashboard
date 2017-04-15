@@ -17,7 +17,7 @@ firebase.initializeApp(config);
 // Referencing Firebase Database
 var dbRef = firebase.database().ref();
 
-
+// Initialize function (called in Document Ready at bottom)
 googleDash.init = function () {
     googleDash.form();
     googleDash.events();
@@ -44,7 +44,7 @@ googleDash.form = function() {
           alert(errorMessage);
         }
       });
-
+      // Resets all form inputs to nothing
       $('form').each(function(){
           this.reset();
       });
@@ -58,12 +58,80 @@ googleDash.events = function() {
 }
 
 
+googleDash.signOut = function() {
+  $('#logOut').on("click", function(e){ 
+    e.preventDefault();
+    firebase.auth().signOut().then(function() {
+      console.log('Signed Out');
+      window.location.reload(false);
+    }, function(error) {
+      console.error('Sign Out Error', error);
+    });
+  });
+}
+
+googleDash.getUserInfo = function() {
+  let userEmail = firebase.auth().currentUser.email;
+  $('#userEmail').append(userEmail);
+}
+
+googleDash.getDate = function() {
+  let startDate = new Date(new Date().getTime() - 744 * 60 * 60 * 1000);
+  let endDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+  $('#startDate').append(startDate);
+  $('#endDate').append(endDate);
+}
+
+googleDash.getOtherData = function() {
+  $.ajax({
+    url: 'https://scenic-kiln-158617.appspot.com/query?id=ahRzfnNjZW5pYy1raWxuLTE1ODYxN3IVCxIIQXBpUXVlcnkYgICAgN7qiQoM',
+    method: 'GET',
+    dataType: 'jsonp'
+  }).then(function(otherData) {
+    let allOtherData = otherData.totalsForAllResults;
+    console.log(allOtherData);
+    
+    // Google AdWords Data
+    let costPerClick = allOtherData["ga:CPC"];
+    let clickThroughRatio = allOtherData["ga:CTR"];
+    let totalAdClicks = allOtherData["ga:adClicks"];
+    let totalAdCost = allOtherData["ga:adCost"];
+    let adImpressions = allOtherData["ga:impressions"];
+
+    // Google Analytics Data
+    let totalSessions = allOtherData["ga:sessions"];
+    let bounceRate = allOtherData["ga:bounceRate"];
+    let newUsers = allOtherData["ga:newUsers"];
+    let averageSession = allOtherData["ga:sessionDuration"];
+    
+    $("#gaClicks").append(totalAdClicks);
+    $("#gaCost").append(totalAdCost);
+    $("#adCtr").append(clickThroughRatio);
+    $("#adCpc").append(costPerClick);
+    $("#adImpressions").append(adImpressions);
+
+    $("#gaSessions").append(totalSessions);
+    $("#gaBounceRate").append(bounceRate);
+    $("#gaNewUsers").append(newUsers);
+    $("#gaSessionDuration").append(averageSession);
+
+  });
+}
+
+
 // If user is logged in, show the Google Chart data
 googleDash.activeUser = function() {
     firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       googleDash.drawVisualization();
       $('#loginModel').toggleClass('hideElement');
+      $('#navbarStatus').append('<div class="navbar"><div class="navbar__header"><h2>Welcome</h2><img src="assets/footer_logo_color_trans.png" alt=""></div><div class="navbar__timeFrame"><p>Results Time Frame</p><div class="navbar__timeFrame--date"><span id="startDate"></span> to <span id="endDate"></span></div></div><div class="navbar__footer"><p>Logged In As:<br><span id="userEmail"></span></p><input type="submit" id="logOut" value="Sign Out" class="navbar__logOut"></input></div></div>');
+
+      googleDash.getUserInfo();
+      googleDash.getOtherData();
+      googleDash.getDate();
+      googleDash.signOut();
+
     } else {
       // run else code if necessary
     }
@@ -74,8 +142,8 @@ googleDash.activeUser = function() {
 // Getting data from Google SuperProxy and prints to page with Google Charts
 googleDash.drawVisualization = function() {
   // Gets browser info from GA
-  let browserWrapper = new google.visualization.ChartWrapper({
-     "containerId": "browser",
+  let usersBrowser = new google.visualization.ChartWrapper({
+     "containerId": "usersBrowser",
      "dataSourceUrl": 'https://scenic-kiln-158617.appspot.com/query?id=ahRzfnNjZW5pYy1raWxuLTE1ODYxN3IVCxIIQXBpUXVlcnkYgICAgICAgAoM&format=data-table-response',
      "refreshInterval": 3600,
      "chartType": "PieChart",
@@ -83,15 +151,15 @@ googleDash.drawVisualization = function() {
         "showRowNumber" : true,
         "width": 630,
         "height": 440,
-        "is3D": true,
+        "is3D": false,
         "title": "Click Source"
      }
    });
   
   // Gets click source info from GA
-  let browserWrapperTwo = new google.visualization.ChartWrapper({
+  let usersClickSource = new google.visualization.ChartWrapper({
       // Example Browser Share Query
-     "containerId": "browserTwo",
+     "containerId": "usersClickSource",
      "dataSourceUrl": "https://scenic-kiln-158617.appspot.com/query?id=ahRzfnNjZW5pYy1raWxuLTE1ODYxN3IVCxIIQXBpUXVlcnkYgICAgLyhggoM&format=data-table-response",
      "refreshInterval": 3600,
      "chartType": "PieChart",
@@ -99,15 +167,49 @@ googleDash.drawVisualization = function() {
         "showRowNumber" : true,
         "width": 630,
         "height": 440,
-        "is3D": true,
+        "is3D": false,
         "title": "Most Used Browsers"
      }
    });
 
-  // Calling the functions
-  browserWrapper.draw();
-  browserWrapperTwo.draw();
+  // Gets click source info from GA
+  let usersCampaignSources = new google.visualization.ChartWrapper({
+      // Example Browser Share Query
+     "containerId": "usersCampaignSources",
+     "dataSourceUrl": "https://scenic-kiln-158617.appspot.com/query?id=ahRzfnNjZW5pYy1raWxuLTE1ODYxN3IVCxIIQXBpUXVlcnkYgICAgNq3lwoM&format=data-table-response",
+     "refreshInterval": 3600,
+     "chartType": "PieChart",
+     "options": {
+        "showRowNumber" : true,
+        "width": 630,
+        "height": 440,
+        "is3D": false,
+        "title": "AdWords Campaign Source"
+     }
+   });
 
+  // Gets click source info from GA
+  let usersOperatingSystem = new google.visualization.ChartWrapper({
+      // Example Browser Share Query
+     "containerId": "usersOperatingSystem",
+     "dataSourceUrl": "https://scenic-kiln-158617.appspot.com/query?id=ahRzfnNjZW5pYy1raWxuLTE1ODYxN3IVCxIIQXBpUXVlcnkYgICAgN6MkAoM&format=data-table-response",
+     "refreshInterval": 3600,
+     "chartType": "PieChart",
+     "options": {
+        "showRowNumber" : true,
+        "width": 630,
+        "height": 440,
+        "is3D": false,
+        "title": "Operating Systems"
+     }
+   });
+
+
+  // Calling the functions to print charts in DOM
+  usersBrowser.draw();
+  usersClickSource.draw();
+  usersCampaignSources.draw();
+  usersOperatingSystem.draw();
 }
 
 
