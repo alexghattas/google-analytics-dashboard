@@ -88,7 +88,9 @@ googleDash.getOtherData = function() {
     method: 'GET',
     dataType: 'jsonp'
   }).then(function(otherData) {
+    console.log(otherData);
     let allOtherData = otherData.totalsForAllResults;
+    let profileInfo = otherData["profileInfo"];
     console.log(allOtherData);
     
     // Google AdWords Data
@@ -103,7 +105,10 @@ googleDash.getOtherData = function() {
     let bounceRate = allOtherData["ga:bounceRate"];
     let newUsers = allOtherData["ga:newUsers"];
     let averageSession = allOtherData["ga:sessionDuration"];
-    
+
+    // NavBar Information
+    let gaWebProperty = profileInfo["webPropertyId"];
+
     $("#gaClicks").append(totalAdClicks);
     $("#gaCost").append(totalAdCost);
     $("#adCtr").append(clickThroughRatio);
@@ -115,6 +120,8 @@ googleDash.getOtherData = function() {
     $("#gaNewUsers").append(newUsers);
     $("#gaSessionDuration").append(averageSession);
 
+    $("#gaWebProperty").append(gaWebProperty);
+
   });
 }
 
@@ -125,7 +132,29 @@ googleDash.activeUser = function() {
     if (user) {
       googleDash.drawVisualization();
       $('#loginModel').toggleClass('hideElement');
-      $('#navbarStatus').append('<div class="navbar"><div class="navbar__header"><h2>Welcome</h2><img src="assets/footer_logo_color_trans.png" alt=""></div><div class="navbar__timeFrame"><p>Results Time Frame</p><div class="navbar__timeFrame--date"><span id="startDate"></span> to <span id="endDate"></span></div></div><div class="navbar__footer"><p>Logged In As:<br><span id="userEmail"></span></p><input type="submit" id="logOut" value="Sign Out" class="navbar__logOut"></input></div></div>');
+      $('#navbarStatus').append('\
+        <div class="navbar">\
+          <div class="navbar__header">\
+            <h2>Welcome</h2>\
+            <img src="assets/footer_logo_color_trans.png" alt="">\
+          </div>\
+          <div class="navbar__timeFrame">\
+            <p>Results Time Frame</p>\
+            <div class="navbar__timeFrame--date">\
+              <span id="startDate"></span> to <span id="endDate"></span>\
+            </div>\
+          </div>\
+          <div class="navbar__profile">\
+            <p>Your Google Analytics Web ID</p>\
+            <div class="navbar__timeFrame--date">\
+              <span id="gaWebProperty"></span>\
+            </div>\
+          </div>\
+          <div class="navbar__footer">\
+            <p>Logged In As:<br><span id="userEmail"></span></p>\
+            <input type="submit" id="logOut" value="Sign Out" class="navbar__logOut"></input>\
+          </div>\
+        </div>');
 
       googleDash.getUserInfo();
       googleDash.getOtherData();
@@ -149,8 +178,8 @@ googleDash.drawVisualization = function() {
      "chartType": "PieChart",
      "options": {
         "showRowNumber" : true,
-        "width": 630,
-        "height": 440,
+        "width": 500,
+        "height": 300,
         "is3D": false,
         "title": "Click Source"
      }
@@ -165,8 +194,8 @@ googleDash.drawVisualization = function() {
      "chartType": "PieChart",
      "options": {
         "showRowNumber" : true,
-        "width": 630,
-        "height": 440,
+        "width": 500,
+        "height": 300,
         "is3D": false,
         "title": "Most Used Browsers"
      }
@@ -181,8 +210,8 @@ googleDash.drawVisualization = function() {
      "chartType": "PieChart",
      "options": {
         "showRowNumber" : true,
-        "width": 630,
-        "height": 440,
+        "width": 500,
+        "height": 300,
         "is3D": false,
         "title": "AdWords Campaign Source"
      }
@@ -197,8 +226,8 @@ googleDash.drawVisualization = function() {
      "chartType": "PieChart",
      "options": {
         "showRowNumber" : true,
-        "width": 630,
-        "height": 440,
+        "width": 500,
+        "height": 300,
         "is3D": false,
         "title": "Operating Systems"
      }
