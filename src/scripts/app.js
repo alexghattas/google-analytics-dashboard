@@ -19,6 +19,7 @@ var dbRef = firebase.database().ref();
 
 // Initialize function (called in Document Ready at bottom)
 googleDash.init = function () {
+    $('#otherDataMain').hide();
     googleDash.form();
     googleDash.events();
 }
@@ -55,6 +56,11 @@ googleDash.form = function() {
 // Main event function
 googleDash.events = function() {
   googleDash.activeUser();
+
+  // Show and hide info div for definitions
+  $('#showInfo__clicks, #showInfo__total, #showInfo__ctr, #showInfo__cpc, #showInfo__impressions, #showInfo__visits, #showInfo__bounce, #showInfo__newUsers, #showInfo__sessions').on('click', function(){
+      $(this).children('.otherData__showInfo').fadeToggle();
+  });
 }
 
 
@@ -62,7 +68,7 @@ googleDash.signOut = function() {
   $('#logOut').on("click", function(e){ 
     e.preventDefault();
     firebase.auth().signOut().then(function() {
-      console.log('Signed Out');
+      $('#otherDataMain').hide();
       window.location.reload(false);
     }, function(error) {
       console.error('Sign Out Error', error);
@@ -70,32 +76,44 @@ googleDash.signOut = function() {
   });
 }
 
+
+// Get users profile information from Firebase
 googleDash.getUserInfo = function() {
   let userEmail = firebase.auth().currentUser.email;
   $('#userEmail').append(userEmail);
 }
 
+
+// Gets data, from yesterday to 30 days before, convert string to "Day Month Year"
 googleDash.getDate = function() {
   let startDate = new Date(new Date().getTime() - 744 * 60 * 60 * 1000);
+  startDate = new Date(startDate).toUTCString();
+  startDate = startDate.split(' ').slice(1, 4).join(' ');
+
   let endDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+  endDate = new Date(endDate).toUTCString();
+  endDate = endDate.split(' ').slice(1, 4).join(' ');
+
   $('#startDate').append(startDate);
   $('#endDate').append(endDate);
 }
 
+// Get other data from Google Superproxy
 googleDash.getOtherData = function() {
   $.ajax({
     url: 'https://scenic-kiln-158617.appspot.com/query?id=ahRzfnNjZW5pYy1raWxuLTE1ODYxN3IVCxIIQXBpUXVlcnkYgICAgN7qiQoM',
     method: 'GET',
     dataType: 'jsonp'
   }).then(function(otherData) {
-    console.log(otherData);
     let allOtherData = otherData.totalsForAllResults;
     let profileInfo = otherData["profileInfo"];
-    console.log(allOtherData);
     
     // Google AdWords Data
     let costPerClick = allOtherData["ga:CPC"];
-    let clickThroughRatio = allOtherData["ga:CTR"];
+    costPerClick = costPerClick.substring(0, 4);
+    let clickThroughRatio = allOtherData["ga:CTR"]
+    clickThroughRatio = clickThroughRatio.substring(0, 4);
+
     let totalAdClicks = allOtherData["ga:adClicks"];
     let totalAdCost = allOtherData["ga:adCost"];
     let adImpressions = allOtherData["ga:impressions"];
@@ -103,23 +121,27 @@ googleDash.getOtherData = function() {
     // Google Analytics Data
     let totalSessions = allOtherData["ga:sessions"];
     let bounceRate = allOtherData["ga:bounceRate"];
+    bounceRate = bounceRate.substring(0, 4);
     let newUsers = allOtherData["ga:newUsers"];
     let averageSession = allOtherData["ga:sessionDuration"];
 
     // NavBar Information
     let gaWebProperty = profileInfo["webPropertyId"];
-
+    
+    // Print AdWords data to DOM
     $("#gaClicks").append(totalAdClicks);
     $("#gaCost").append(totalAdCost);
     $("#adCtr").append(clickThroughRatio);
     $("#adCpc").append(costPerClick);
     $("#adImpressions").append(adImpressions);
 
+    // Print GA data to DOM
     $("#gaSessions").append(totalSessions);
     $("#gaBounceRate").append(bounceRate);
     $("#gaNewUsers").append(newUsers);
     $("#gaSessionDuration").append(averageSession);
-
+    
+    // Print user profile information to DOM
     $("#gaWebProperty").append(gaWebProperty);
 
   });
@@ -132,6 +154,7 @@ googleDash.activeUser = function() {
     if (user) {
       googleDash.drawVisualization();
       $('#loginModel').toggleClass('hideElement');
+      $('#otherDataMain').show();
       $('#navbarStatus').append('\
         <div class="navbar">\
           <div class="navbar__header">\
@@ -139,15 +162,15 @@ googleDash.activeUser = function() {
             <img src="assets/footer_logo_color_trans.png" alt="">\
           </div>\
           <div class="navbar__timeFrame">\
-            <p>Results Time Frame</p>\
+            <p>Results Time Frame:</p>\
             <div class="navbar__timeFrame--date">\
-              <span id="startDate"></span> to <span id="endDate"></span>\
+              <p><span id="startDate"></span><br>to<br><span id="endDate"></span></p>\
             </div>\
           </div>\
           <div class="navbar__profile">\
-            <p>Your Google Analytics Web ID</p>\
+            <p>Your Google Analytics Web ID:</p>\
             <div class="navbar__timeFrame--date">\
-              <span id="gaWebProperty"></span>\
+              <p><span id="gaWebProperty"></span></p>\
             </div>\
           </div>\
           <div class="navbar__footer">\
@@ -232,6 +255,7 @@ googleDash.drawVisualization = function() {
         "title": "Operating Systems"
      }
    });
+
 
 
   // Calling the functions to print charts in DOM

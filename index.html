@@ -28,28 +28,43 @@
 	<nav id="navbarStatus">
 	</nav>
 
-	<section class="otherData">
+	<section id="otherDataMain" class="otherData">
 		<div class="otherData__advertising">
 			<h3>Your Advertising Metrics</h3>
 			<ul>
 				<li>
+					<i id="showInfo__clicks" class="fa fa-question-circle" aria-hidden="true">
+						<div class="otherData__showInfo"><p>This shows how many users have clicked on your Google Ads in the given time frame.</p></div>
+					</i>
 					<h4>Total Ad Clicks</h4>
 					<p><span id="gaClicks"></span></p>
 				</li>
 				<li>
+					<i id="showInfo__total" class="fa fa-question-circle" aria-hidden="true">
+						<div class="otherData__showInfo"><p>Total cost of all Google AdWords campaigns combined.</p></div>
+					</i>
 					<h4>Total Ad Cost</h4>
-					<p><span id="gaCost"></span></p>
+					<p>$ <span id="gaCost"></span></p>
 				</li>
 				<li>
+					<i id="showInfo__ctr" class="fa fa-question-circle" aria-hidden="true">
+						<div class="otherData__showInfo"><p>A ratio showing how often people who see your ad end up clicking it. CTR can be used to gauge how well your keywords and ads are performing.</p></div>
+					</i>
 					<h4>Ads CTR</h4>
-					<p><span id="adCtr"></span></p>
+					<p>% <span id="adCtr"></span></p>
 				</li>
 				<li>
+					<i id="showInfo__cpc" class="fa fa-question-circle" aria-hidden="true">
+						<div class="otherData__showInfo"><p>Cost-per-click (CPC). How much on average you pay for each click on your ads.</p></div>
+					</i>
 					<h4>Ads CPC</h4>
-					<p><span id="adCpc"></span></p>
+					<p>$ <span id="adCpc"></span></p>
 				</li>
 				<li>
-					<h4>Total Ad Impressions</h4>
+					<i id="showInfo__impressions" class="fa fa-question-circle" aria-hidden="true">
+						<div class="otherData__showInfo"><p>How often your ad is shown. An impression is counted each time your ad is shown on a search result page or other site on the Google Network.</p></div>
+					</i>
+					<h4>Ad Impressions</h4>
 					<p><span id="adImpressions"></span></p>
 				</li>
 			</ul>
@@ -58,18 +73,30 @@
 			<h3>Your Website Metrics</h3>
 			<ul>
 				<li>
+					<i id="showInfo__visits" class="fa fa-question-circle" aria-hidden="true">
+						<div class="otherData__showInfo"><p>How many visits your website has within the given time frame</p></div>
+					</i>
 					<h4>Total Visits</h4>
 					<p><span id="gaSessions"></span></p>
 				</li>
 				<li>
+					<i id="showInfo__bounce" class="fa fa-question-circle" aria-hidden="true">
+						<div class="otherData__showInfo"><p>The percentage of visitors to a particular website who navigate away from the site after viewing only one page.</p></div>
+					</i>
 					<h4>Bounce Rate</h4>
-					<p><span id="gaBounceRate"></span></p>
+					<p>% <span id="gaBounceRate"></span></p>
 				</li>
 				<li>
+					<i id="showInfo__newUsers" class="fa fa-question-circle" aria-hidden="true">
+						<div class="otherData__showInfo"><p>These are unique visitors that have landed on your site for the first time.</p></div>
+					</i>
 					<h4>New Users</h4>
 					<p><span id="gaNewUsers"></span></p>
 				</li>
 				<li>
+					<i id="showInfo__sessions" class="fa fa-question-circle" aria-hidden="true">
+						<div class="otherData__showInfo"><p>The average time spent on your website by your users.</p></div>
+					</i>
 					<h4>Average Session</h4>
 					<p><span id="gaSessionDuration"></span></p>
 				</li>
@@ -79,6 +106,7 @@
 	</section>
 
 	<section class="mainContent">
+		<h3>A Few More Metrics About Your Users</h3>
 		<ul class="displayCharts">
 			<li>
 				<div id="usersBrowser" class="chartMain"></div>
@@ -94,7 +122,7 @@
 			</li>
 			<li>
 				<div id="usersOperatingSystem" class="chartMain"></div>
-				<p>Mobile vs Desktop users (IOS and Android are mobile | Macintosh and Windows are Desktop)</p>
+				<p>Mobile vs Desktop users (iOS and Android are mobile | Macintosh and Windows are Desktop)</p>
 			</li>
 		</ul>
 	</section>

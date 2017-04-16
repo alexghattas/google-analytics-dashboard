@@ -12,8 +12,11 @@ body {
 }
 
 .showElement {
-	display: inline;
 	visibility: visible;
+}
+
+.showInfo {
+	display: inline;
 }
 
 .chartMain {
@@ -133,11 +136,12 @@ body {
 }
 
 .navbar__timeFrame--date {
-	background: white;
-	padding: 5px;
-	color: #212121;
+	padding: 10px;
+	color: white;
+	background: #22242B;
 	font-size: 14px;
 	margin-top: 10px;
+	font-weight: 300;
 }
 
 .navbar__footer {
@@ -145,16 +149,17 @@ body {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	padding-bottom: 30px;
+	padding: 20px 0;
+	background: #22242b;
 	p {
 		color: white;
 		padding-bottom: 20px;
 	}
 	input {
-		background: none;
-		border: 1px solid white;
+		background: white;
+		border: none;
 		font-size: 14px;
-		color: white;
+		color: #22242b;
 		padding: 4px 20px;
 		font-family: 'Source Sans Pro', sans-serif;
 		font-weight: 300;
@@ -168,18 +173,28 @@ body {
 
 .mainContent {
 	padding: 10px 30px;
+	margin-left: 250px;
+	h3 {
+		text-align: center;
+		font-weight: 500;
+		padding-top: 25px;
+		font-size: 22px;
+		text-transform: uppercase;
+	}
 }
 
 .otherData {
-	margin-left: 250px;
 	display: flex;
-	background: #f2f2f2;
+	margin-left: 250px;
+	background: #00a7ba;
 	padding: 30px 20px;
+	color: white;
 	h3 {
 		text-align: center;
 		font-weight: 500;
 		padding-bottom: 10px;
 		font-size: 22px;
+		text-transform: uppercase;
 	}
 }
 
@@ -194,28 +209,57 @@ body {
 
 .otherData__advertising, .otherData__website {
 	width: 50%;
+	padding: 20px;
 }
 
 .otherData__advertising li, .otherData__website li  {
+	position: relative;
 	width: calc(50% - 20px);
 	padding: 5px;
-	border: 1px solid #e0e0e0;
+	background: #0090a0;
 	margin: 5px;
 	h4 {
 		font-size: 14px;
+		color: #dfdfdf;
+		font-weight: 500;
 	}
 	span {
 		font-weight: 500;
-		font-size: 20px;
+		font-size: 22px;
+	}
+	.fa {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		color: #004247;
+	}
+	i {
+		position: relative;
+	}
+	.otherData__showInfo {
+		position: absolute;
+		z-index: 5;
+		display: none;
+		width: 200px;
+		color: white;
+		padding: 10px 5px;
+		right: -2px;
+		background: rgba(0, 0, 0, 0.85);
+		font-size: 12px;
 	}
 }
+
+.otherData__line {
+	border-left: 1px solid #004247;
+	height: 300px;
+}
+
 .displayCharts {
 	display: flex;
 	flex-wrap: wrap;
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	margin-left: 250px;
 }
 
 .displayCharts li {
@@ -223,5 +267,7 @@ body {
 	margin: 30px 10px;
 	p {
 		text-align: center;
+		background: #f4f4f4;
+		padding: 15px 10px;
 	}
 }
